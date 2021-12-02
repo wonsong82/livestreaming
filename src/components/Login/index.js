@@ -4,11 +4,19 @@ import { onAuthUIStateChange } from '@aws-amplify/ui-components';
 
 const Login = (props) => {
 
-  /* Location 3 */
-  /* Location 2  - Replace the return function below!*/
-  return (
-    <div>Login is not ready yet</div>
-  );
+    React.useEffect(() => {
+        return onAuthUIStateChange((nextAuthState, authData) => {
+            props.setAuthState(nextAuthState);
+            props.setUser(authData);
+        });
+    }, []);
+
+  
+    return (
+        <AmplifyAuthContainer>
+            <AmplifyAuthenticator />
+        </AmplifyAuthContainer>
+    );
 }
 
 export default Login;

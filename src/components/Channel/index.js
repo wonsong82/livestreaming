@@ -8,7 +8,16 @@ import Video from '../Video';
 import NavBar from '../NavBar';
 import './index.css';
 
-/* Location 8 */
+const getPublicChannel = /* GraphQL */ `
+        query GetChannel($id: ID!) {
+            getChannel(id: $id) {
+                id
+                title
+                description
+                streamURL
+            }
+        }
+    `;
 
 class Channel extends Component {
 
@@ -26,7 +35,14 @@ class Channel extends Component {
         const input = {
             id: name,
         };
-        /* Location 9 */
+        try {
+            API.graphql(graphqlOperation( getPublicChannel, input)).then((results) => {
+                this.setState({ item: results.data.getChannel } );
+            });
+        } catch(e){
+            console.log("Can't find channel");
+        };
+
     }
 
     tags = () => {
@@ -43,6 +59,14 @@ class Channel extends Component {
         const { item } = this.state;
         if (item.streamURL) {
             /* Location 12 */
+            return (
+                <Video 
+                    src={item.streamURL}
+                    techOrder={['AmazonIVS']}
+                    controls
+                    />
+        );
+
         } else {
             return (<div></div>);
         }
